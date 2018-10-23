@@ -6,7 +6,7 @@ public class MemberInfo {
 	private String id;
 	private String pass;
 	private String name;
-	private String phone;
+	private String numb;
 	private String email;
     private Timestamp date;
 	
@@ -34,11 +34,11 @@ public class MemberInfo {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getPhone() {
-		return phone;
+	public String getNumb() {
+		return numb;
 	}
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setNumb(String numb) {
+		this.numb = numb;
 	}
 	public String getEmail() {
 		return email;

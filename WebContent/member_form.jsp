@@ -23,7 +23,7 @@
 	</tr>
 	<tr>
 		<td>전화번호</td>
-		<td><input type="text" name="phone"/></td>
+		<td><input type="text" name="numb"/></td>
 	</tr>
 	<tr>
 		<td>이름</td>

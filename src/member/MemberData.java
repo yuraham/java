@@ -35,7 +35,7 @@ public class MemberData {
 
 	public int insertMember(MemberInfo member) {
 		PreparedStatement pstmt = null;
-		String query = "INSERT INFO member VALUE(?,?,?,?,?,?)";
+		String query = "INSERT INTO member VALUE(?,?,?,?,?,?)";
 		int res=0;
 		openConnection();
 		try {
@@ -43,7 +43,7 @@ public class MemberData {
 			pstmt.setString(1, member.getId());
 			pstmt.setString(2, member.getPass());
 			pstmt.setString(3, member.getEmail());
-			pstmt.setString(4, member.getPhone());
+			pstmt.setString(4, member.getNumb());
 			pstmt.setString(5, member.getName());
 			Timestamp ts = new Timestamp(System.currentTimeMillis());
 			pstmt.setTimestamp(6, ts);
@@ -55,18 +55,18 @@ public class MemberData {
 		}
 		return res;
 	}
-    public int updateMember(MemberInfo member) {
+	
+    public int updateMember(MemberInfo member, String id) {
         PreparedStatement pstmt = null;
-        String query = "UPDATE member SET pass=?, name=?, phone=?, email=? WHERE id=?";
+        String query = "UPDATE member SET pass=?, name=?, email=? WHERE id=?";
         int res = 0;
         openConnection();
         try {
             pstmt = con.prepareStatement(query);
             pstmt.setString(1, member.getPass());
             pstmt.setString(2, member.getName());
-            pstmt.setString(3, member.getPhone());
-            pstmt.setString(4, member.getEmail());
-            pstmt.setString(5, member.getId());
+            pstmt.setString(3, member.getEmail());
+            pstmt.setString(4, id);
             res = pstmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +78,7 @@ public class MemberData {
     
     public boolean isMember(String id, String pass) {
     	PreparedStatement pstmt = null;
-    	String query = "SELECT * FROM member WHERE id=?, pass=?";
+    	String query = "SELECT * FROM member WHERE id=? and pass=?";
     	boolean res = false;
     	openConnection();
     	try {
@@ -96,6 +96,22 @@ public class MemberData {
     	return res;
     }
     
+    public int removeMember(String id) {
+    	PreparedStatement pstmt=null;
+    	String query = "DELETE FROM member WHERE id=?";
+    	int res = 0;
+    	openConnection();
+    	try {
+    		pstmt = con.prepareCall(query);
+    		pstmt.setString(1, id);
+    		res = pstmt.executeUpdate();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		closeConnection();
+    	}
+    	return res;
+    }
 	
     public MemberInfo getMember(String id) {
         PreparedStatement pstmt = null;
@@ -110,7 +126,7 @@ public class MemberData {
             member.setId(rs.getString("id"));
             member.setPass(rs.getString("pass"));
             member.setName(rs.getString("name"));
-            member.setPhone(rs.getString("phone"));
+            member.setNumb(rs.getString("numb"));
             member.setEmail(rs.getString("email"));
             member.setDate(rs.getTimestamp("date"));
             rs.close();

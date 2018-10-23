@@ -11,7 +11,7 @@
 <title>제목없음</title>
 </head>
 <body>
-<jsp:useBean id="data" class="member.MemberData" scope="page" />
+<jsp:useBean id="data" class="member.MemberData" scope="session" />
 <%
 	String id = request.getParameter("id");
 	String pass = request.getParameter("pass");

@@ -7,7 +7,7 @@
 <title>제목없음</title>
 </head>
 <body>
-<form action="member_login.jsp">
+<form action="member_login.jsp" method="post">
 	<table>
 		<tr>
 			<td>아이디</td>
