@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.sql.Types;
+import java.util.ArrayList;
 
 public class DataManager {
 	Connection con = null;
@@ -36,15 +38,16 @@ public class DataManager {
 	
 	public int insertPost(PostInfo post) {
 		PreparedStatement pstmt=null;
-		String query = "INSERT INTO post(text, writer, cd_date) VALUES(?,?,?)";
+		String query = "INSERT INTO post VALUES(?,?,?,?)";
 		int res = 0;
 		openConnection();
 		try { 
 			pstmt = con.prepareStatement(query);
-			pstmt.setString(1, post.getText());
-			pstmt.setString(2, post.getWriter());
+			pstmt.setInt(1, Types.NULL);
+			pstmt.setString(2, post.getText());
+			pstmt.setString(3, post.getWriter());
 			Timestamp ts = new Timestamp(System.currentTimeMillis());
-			pstmt.setTimestamp(3, ts);
+			pstmt.setTimestamp(4, ts);
 			res = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,6 +56,29 @@ public class DataManager {
 		}
 		return res;
 	}
+	
+	public ArrayList<PostInfo> getList() {
+		PreparedStatement pstmt = null;
+		String query = "SELECT * FROM post ORDER BY numb DESC LIMIT 10";
+		ArrayList<PostInfo> list = new ArrayList<PostInfo>();
+		try {
+			pstmt = con.prepareStatement(query);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				PostInfo post = new PostInfo();
+				post.setNumb(rs.getInt("numb"));
+				post.setText(rs.getString("text"));
+				post.setWriter(rs.getString("writer"));
+				post.setCd_date(rs.getTimestamp("cd_date"));
+				list.add(post);
+			};
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	
 	public boolean isPost(int numb) {
 		PreparedStatement pstmt = null;
@@ -72,6 +98,7 @@ public class DataManager {
 		}
 		return res;
 	}
+	
 	
 	public PostInfo getPost(int numb) { //numb이 null로 들어움
 		PreparedStatement pstmt = null;
